@@ -1,168 +1,299 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-white/80 leading-tight">
                 {{ __('Manajemen User') }}
             </h2>
-            <a href="{{ route('admin.users.pending') }}" class="inline-flex items-center px-4 py-2 bg-yellow-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                Pending Verifikasi
-            </a>
         </div>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-[1440px] mx-auto sm:px-6 lg:px-8">
             @if(session('success'))
-                <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                    {{ session('success') }}
+                <div class="bg-green-800/40 border border-green-400/20 text-green-500 px-4 py-3 rounded relative mb-4" role="alert">
+                    <span class="block sm:inline">{{ session('success') }}</span>
                 </div>
             @endif
 
             @if(session('error'))
-                <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                    {{ session('error') }}
+                <div class="bg-red-800/40 border border-red-400/20 text-red-500 px-4 py-3 rounded relative mb-4" role="alert">
+                    <span class="block sm:inline">{{ session('error') }}</span>
                 </div>
             @endif
 
-            @if(session('info'))
-                <div class="mb-4 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative">
-                    {{ session('info') }}
-                </div>
-            @endif
+            <!-- Tabs Navigation -->
+            <div class="border-b border-gray-700 mb-6">
+                <ul class="flex flex-wrap -mb-px text-sm font-medium text-center">
+                    <li class="me-2">
+                        <button
+                            onclick="showTab('semua')"
+                            id="tab-semua"
+                            class="inline-flex items-center justify-center p-4 border-b-2 border-[#ffcc00] text-[#ffcc00] rounded-t-lg font-semibold">
+                            Semua User
+                        </button>
+                    </li>
+                    <li class="me-2">
+                        <button
+                            onclick="showTab('verified')"
+                            id="tab-verified"
+                            class="inline-flex items-center justify-center p-4 border-b-2 border-transparent text-white/60 rounded-t-lg font-semibold hover:text-[#ffcc00]">
+                            User Terverifikasi
+                        </button>
+                    </li>
+                    <li class="me-2">
+                        <button
+                            onclick="showTab('pending')"
+                            id="tab-pending"
+                            class="inline-flex items-center justify-center p-4 border-b-2 border-transparent text-white/60 rounded-t-lg font-semibold hover:text-[#ffcc00]">
+                            User Pending
+                        </button>
+                    </li>
+                </ul>
+            </div>
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <div class="mb-4 flex justify-between items-center">
-                        <div class="text-sm text-gray-600">
-                            Total: <span class="font-semibold">{{ $users->total() }}</span> user
-                        </div>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Nama
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Email
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Status
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Verifikasi
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Aksi
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                @forelse($users as $user)
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div class="flex-shrink-0 h-10 w-10">
-                                                    <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                                                        <span class="text-indigo-600 font-medium">
-                                                            {{ strtoupper(substr($user->name, 0, 1)) }}
+            <!-- Content Semua User -->
+            <div id="content-semua" class="tab-panel">
+                <div class="bg-zinc-900 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        @if($users->count() > 0)
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-600">
+                                    <thead class="bg-zinc-800">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Nama</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Email</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Role</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Status</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Terdaftar</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-600">
+                                        @foreach($users as $user)
+                                            <tr class="hover:bg-zinc-800/50">
+                                                <td class="px-6 py-4 text-sm text-white">{{ $user->name }}</td>
+                                                <td class="px-6 py-4 text-sm text-white">{{ $user->email }}</td>
+                                                <td class="px-6 py-4 text-sm">
+                                                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-500/20 text-blue-400">
+                                                        {{ ucfirst($user->role) }}
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4 text-sm">
+                                                    @if($user->is_verified)
+                                                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-500/20 text-green-400">
+                                                            Terverifikasi
                                                         </span>
-                                                    </div>
-                                                </div>
-                                                <div class="ml-4">
-                                                    <div class="text-sm font-medium text-gray-900">
-                                                        {{ $user->name }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $user->email }}</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            @if($user->is_verified)
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                                    </svg>
-                                                    Aktif
-                                                </span>
-                                            @else
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                                                    </svg>
-                                                    Pending
-                                                </span>
-                                            @endif
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-xs text-gray-500">
-                                                @if($user->verified_at)
-                                                    <div class="flex items-center">
-                                                        <svg class="w-3 h-3 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                                        </svg>
-                                                        <span>{{ $user->verified_at->format('d/m/Y') }}</span>
-                                                    </div>
-                                                    @if($user->verifiedBy)
-                                                        <div class="text-gray-400 mt-1">
-                                                            oleh {{ $user->verifiedBy->name }}
-                                                        </div>
+                                                    @else
+                                                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-500/20 text-yellow-400">
+                                                            Pending
+                                                        </span>
                                                     @endif
-                                                @else
-                                                    <span class="text-gray-400">Belum diverifikasi</span>
-                                                @endif
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <div class="flex items-center space-x-2">
-                                                <form action="{{ route('admin.users.toggle', $user->id) }}" method="POST" class="inline">
-                                                    @csrf
-                                                    <button type="submit" class="text-indigo-600 hover:text-indigo-900">
-                                                        {{ $user->is_verified ? 'Nonaktifkan' : 'Aktifkan' }}
-                                                    </button>
-                                                </form>
+                                                </td>
+                                                <td class="px-6 py-4 text-sm text-white whitespace-nowrap">
+                                                    {{ $user->created_at->format('d/m/Y') }}
+                                                </td>
+                                                <td class="px-6 py-4 text-sm">
+                                                    <div class="flex items-center gap-3">
+                                                        @if(!$user->is_verified && $user->role !== 'admin')
+                                                            <form action="{{ route('admin.users.verify', $user->id) }}" method="POST" class="inline">
+                                                                @csrf
+                                                                <button type="submit" class="text-green-400 hover:text-green-300">
+                                                                    Verifikasi
+                                                                </button>
+                                                            </form>
+                                                        @endif
 
-                                                <span class="text-gray-300">|</span>
+                                                        @if($user->role !== 'admin')
+                                                            <form action="{{ route('admin.users.toggle', $user->id) }}" method="POST" class="inline">
+                                                                @csrf
+                                                                <button type="submit" class="text-yellow-400 hover:text-yellow-300">
+                                                                    {{ $user->is_verified ? 'Nonaktifkan' : 'Aktifkan' }}
+                                                                </button>
+                                                            </form>
 
-                                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline"
-                                                      onsubmit="return confirm('Yakin ingin menghapus user ini? Data akan dihapus permanen.')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="text-red-600 hover:text-red-900">
-                                                        Hapus
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="px-6 py-8 text-center">
-                                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                                            </svg>
-                                            <p class="mt-2 text-sm text-gray-500">
-                                                Tidak ada user terdaftar
-                                            </p>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="mt-4">
-                        {{ $users->links() }}
+                                                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="text-red-400 hover:text-red-300" onclick="return confirm('Yakin ingin menghapus user ini?')">
+                                                                    Delete
+                                                                </button>
+                                                            </form>
+                                                        @else
+                                                            <span class="text-gray-500 text-xs">Admin</span>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="text-center py-8">
+                                <p class="text-gray-500">Tidak ada user</p>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
+
+            <!-- Content User Terverifikasi -->
+            <div id="content-verified" class="tab-panel">
+                <div class="bg-zinc-900 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        @php
+                            $verifiedUsers = $users->where('is_verified', true);
+                        @endphp
+
+                        @if($verifiedUsers->count() > 0)
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-600">
+                                    <thead class="bg-zinc-800">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Nama</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Email</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Role</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Diverifikasi</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-600">
+                                        @foreach($verifiedUsers as $user)
+                                            <tr class="hover:bg-zinc-800/50">
+                                                <td class="px-6 py-4 text-sm text-white">{{ $user->name }}</td>
+                                                <td class="px-6 py-4 text-sm text-white">{{ $user->email }}</td>
+                                                <td class="px-6 py-4 text-sm">
+                                                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-500/20 text-blue-400">
+                                                        {{ ucfirst($user->role) }}
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4 text-sm text-white whitespace-nowrap">
+                                                    {{ $user->verified_at ? $user->verified_at->format('d/m/Y H:i') : '-' }}
+                                                </td>
+                                                <td class="px-6 py-4 text-sm">
+                                                    @if($user->role !== 'admin')
+                                                        <form action="{{ route('admin.users.toggle', $user->id) }}" method="POST" class="inline">
+                                                            @csrf
+                                                            <button type="submit" class="text-yellow-400 hover:text-yellow-300">
+                                                                Nonaktifkan
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span class="text-gray-500 text-xs">Admin</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="text-center py-8">
+                                <p class="text-gray-500">Tidak ada user terverifikasi</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content User Pending -->
+            <div id="content-pending" class="tab-panel">
+                <div class="bg-zinc-900 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        @php
+                            $pendingUsers = $users->where('is_verified', false)->where('role', '!=', 'admin');
+                        @endphp
+
+                        @if($pendingUsers->count() > 0)
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-600">
+                                    <thead class="bg-zinc-800">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Nama</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Email</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Role</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Terdaftar</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-600">
+                                        @foreach($pendingUsers as $user)
+                                            <tr class="hover:bg-zinc-800/50">
+                                                <td class="px-6 py-4 text-sm text-white">{{ $user->name }}</td>
+                                                <td class="px-6 py-4 text-sm text-white">{{ $user->email }}</td>
+                                                <td class="px-6 py-4 text-sm">
+                                                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-500/20 text-blue-400">
+                                                        {{ ucfirst($user->role) }}
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4 text-sm text-white whitespace-nowrap">
+                                                    {{ $user->created_at->format('d/m/Y H:i') }}
+                                                </td>
+                                                <td class="px-6 py-4 text-sm">
+                                                    <div class="flex items-center gap-3">
+                                                        <form action="{{ route('admin.users.verify', $user->id) }}" method="POST" class="inline">
+                                                            @csrf
+                                                            <button type="submit" class="text-green-400 hover:text-green-300">
+                                                                Verifikasi
+                                                            </button>
+                                                        </form>
+
+                                                        <form action="{{ route('admin.users.reject', $user->id) }}" method="POST" class="inline">
+                                                            @csrf
+                                                            <button type="submit" class="text-red-400 hover:text-red-300" onclick="return confirm('Yakin ingin menolak user ini?')">
+                                                                Tolak
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="text-center py-8">
+                                <p class="text-gray-500">Tidak ada user yang menunggu verifikasi</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </x-app-layout>
+
+<script>
+function showTab(tabName) {
+    // Hide all panels
+    const panels = document.querySelectorAll('.tab-panel');
+    panels.forEach(panel => {
+        panel.classList.add('hidden');
+    });
+
+    // Remove active from all buttons
+    const buttons = document.querySelectorAll('[id^="tab-"]');
+    buttons.forEach(button => {
+        button.classList.remove('border-[#ffcc00]', 'text-[#ffcc00]');
+        button.classList.add('border-transparent', 'text-white/60');
+    });
+
+    // Show selected panel
+    document.getElementById('content-' + tabName).classList.remove('hidden');
+
+    // Activate selected button
+    const activeButton = document.getElementById('tab-' + tabName);
+    activeButton.classList.remove('border-transparent', 'text-white/60');
+    activeButton.classList.add('border-[#ffcc00]', 'text-[#ffcc00]');
+
+    // Save to localStorage
+    localStorage.setItem('activeTabUsers', tabName);
+}
+
+// Load saved tab on page load
+window.addEventListener('DOMContentLoaded', function() {
+    const savedTab = localStorage.getItem('activeTabUsers') || 'semua';
+    showTab(savedTab);
+});
+</script>

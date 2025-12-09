@@ -18,6 +18,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->string('role')->default('user');
+            $table->boolean('is_verified')->default(false)->after('email');
+            $table->timestamp('verified_at')->nullable()->after('is_verified');
             $table->timestamps();
         });
 
@@ -42,6 +45,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn(['is_verified', 'verified_at']);
+        });
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');

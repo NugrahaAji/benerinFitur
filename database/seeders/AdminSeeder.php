@@ -17,7 +17,11 @@ class AdminSeeder extends Seeder
             'role' => 'admin',
             'is_verified' => true,
             'verified_at' => now(),
-            'email_verified_at' => now(),
         ]);
+
+        echo "Admin user berhasil dibuat!\n";
+        echo "Email: admin@sipanda.com\n";
+        echo "Password: password\n";
+        echo "PENTING: Segera ganti password setelah login!\n";
     }
 }

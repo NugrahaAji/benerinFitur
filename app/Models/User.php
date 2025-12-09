@@ -16,7 +16,6 @@ class User extends Authenticatable
         'role',
         'is_verified',
         'verified_at',
-        'verified_by',
     ];
 
     protected $hidden = [
@@ -27,8 +26,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'verified_at' => 'datetime',
-        'is_verified' => 'boolean',
         'password' => 'hashed',
+        'is_verified' => 'boolean',
     ];
 
     public function isAdmin(): bool
