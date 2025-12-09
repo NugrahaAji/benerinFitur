@@ -1,18 +1,13 @@
-<x-app-layout header-class="bg-zinc-900">
+<x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-white/80 leading-tight">
-                {{ __('Edit Surat Masuk') }}
-            </h2>
-            <a href="{{ route('surat-masuk.index') }}" class="bg-[#ffcc00]/25 hover:bg-[#ffcc00]/30 text-white font-bold py-2 px-4 rounded">
-                Kembali
-            </a>
-        </div>
+        <h2 class="font-semibold text-xl text-white/80 leading-tight">
+            {{ __('Edit Surat Masuk') }}
+        </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-zinc-900 overflow-hidden shadow-sm sm:rounded-lg border border-gray-700">
+            <div class="bg-zinc-900 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
                     <form action="{{ route('surat-masuk.update', $surat->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -21,108 +16,102 @@
                         <div class="mb-4">
                             <label for="nomor" class="block text-sm font-medium text-white mb-2">Nomor Surat</label>
                             <input type="text" name="nomor" id="nomor" value="{{ old('nomor', $surat->nomor) }}"
-                                class="w-full text-white bg-zinc-800 rounded-md border-zinc-800 shadow-sm @error('nomor') border-red-500 @enderror">
-                            @error('nomor')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                                class="bg-black w-full text-white rounded-md border-zinc-800 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('nomor') border-red-500 @enderror">
+                            @error('nomor')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="mb-4">
-                            <label for="tanggal_masuk" class="block text-sm font-medium text-white mb-2">Tanggal Masuk</label>
-                            <input type="text" name="tanggal_masuk" id="tanggal_masuk"
-                                value="{{ old('tanggal_masuk', optional($surat->tanggal_masuk)->format('Y-m-d')) }}"
-                                class="js-datepicker w-full text-white bg-zinc-800 rounded-md border-zinc-800 shadow-sm @error('tanggal_masuk') border-red-500 @enderror"
-                                placeholder="dd-mm-yyyy" autocomplete="off">
-                            @error('tanggal_masuk')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="pengirim" class="block text-sm font-medium text-white mb-2">Pengirim</label>
+                            <label for="pengirim" class="block text-sm font-medium text-white mb-2">Nama Pengirim</label>
                             <input type="text" name="pengirim" id="pengirim" value="{{ old('pengirim', $surat->pengirim) }}"
-                                class="w-full text-white bg-zinc-800 rounded-md border-zinc-800 shadow-sm @error('pengirim') border-red-500 @enderror">
-                            @error('pengirim')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                                class="bg-black w-full text-white rounded-md border-zinc-800 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('pengirim') border-red-500 @enderror">
+                            @error('pengirim')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="mb-4">
                             <label for="perihal" class="block text-sm font-medium text-white mb-2">Perihal</label>
                             <input type="text" name="perihal" id="perihal" value="{{ old('perihal', $surat->perihal) }}"
-                                class="w-full text-white bg-zinc-800 rounded-md border-zinc-800 shadow-sm @error('perihal') border-red-500 @enderror">
-                            @error('perihal')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                                class="bg-black w-full text-white rounded-md border-zinc-800 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('perihal') border-red-500 @enderror">
+                            @error('perihal')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="tujuan" class="block text-sm font-medium text-white mb-2">Tujuan</label>
+                            <input type="text" name="tujuan" id="tujuan" value="{{ old('tujuan', $surat->tujuan) }}"
+                                class="bg-black w-full text-white rounded-md border-zinc-800 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('tujuan') border-red-500 @enderror">
+                            @error('tujuan')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="mb-4">
                             <label for="keterangan" class="block text-sm font-medium text-white mb-2">Keterangan</label>
-                            <textarea name="keterangan" id="keterangan" rows="4"
-                                class="w-full text-white bg-zinc-800 rounded-md border-zinc-800 shadow-sm @error('keterangan') border-red-500 @enderror">{{ old('keterangan', $surat->keterangan) }}</textarea>
-                            @error('keterangan')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                            <input type="text" name="keterangan" id="keterangan" value="{{ old('keterangan', $surat->keterangan) }}"
+                                class="bg-black w-full text-white rounded-md border-zinc-800 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('keterangan') border-red-500 @enderror">
+                            @error('keterangan')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="tanggal_masuk" class="block text-sm font-medium text-white mb-2">Tanggal</label>
+                            <input type="date" name="tanggal_masuk" id="tanggal_masuk" value="{{ old('tanggal_masuk', $surat->tanggal_masuk) }}"
+                                class="bg-black w-full text-white rounded-md border-zinc-800 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('tanggal_masuk') border-red-500 @enderror">
+                            @error('tanggal_masuk')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="mb-6">
                             <label for="file" class="block text-sm font-medium text-white mb-2">File Surat (Opsional)</label>
 
-                            @if($surat->file_path)
-                                @php
-                                    $url = asset('storage/'.$surat->file_path);
-                                    $ext = strtolower(pathinfo($surat->file_path, PATHINFO_EXTENSION));
-                                    $isImage = in_array($ext, ['jpg','jpeg','png','gif','webp']);
-                                    $isPdf = $ext === 'pdf';
-                                    $downloadName = \Illuminate\Support\Str::slug(($surat->perihal ?? 'surat')."-".($surat->nomor ?? 'no')."-".($surat->tujuan ?? 'tujuan')) . '.' . $ext;
-                                @endphp
-
-                                <div class="mb-3">
-                                    <div class="flex gap-2 mb-2">
-                                        <a href="{{ $url }}" target="_blank" class="bg-[#ffcc00] text-black font-semibold py-1 px-3 rounded text-sm">Buka</a>
-                                        <a href="{{ $url }}" download="{{ $downloadName }}" class="bg-white/10 text-white font-semibold py-1 px-3 rounded text-sm">Unduh</a>
+                            @if($surat->file)
+                                <div class="mb-3 p-3 bg-zinc-800 rounded-md border border-zinc-700">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-2">
+                                            <svg class="w-5 h-5 text-[#ffcc00]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                            </svg>
+                                            <span class="text-sm text-white/80">File saat ini: {{ basename($surat->file) }}</span>
+                                        </div>
+                                        <a href="{{ Storage::url($surat->file) }}" target="_blank"
+                                            class="text-xs text-blue-400 hover:text-blue-300">
+                                            Lihat File
+                                        </a>
                                     </div>
-
-                                    @if($isPdf)
-                                        <div class="w-full h-[400px] bg-black/30 rounded overflow-hidden mb-3">
-                                            <iframe src="{{ $url }}" class="w-full h-full" frameborder="0"></iframe>
-                                        </div>
-                                    @elseif($isImage)
-                                        <div class="max-h-[400px] overflow-auto rounded-md border border-zinc-800 p-2 bg-black mb-3">
-                                            <img src="{{ $url }}" alt="preview file" class="mx-auto max-w-full h-auto" />
-                                        </div>
-                                    @else
-                                        <p class="text-sm">Pratinjau tidak tersedia. <a href="{{ $url }}" target="_blank" class="text-[#ffcc00] underline">Lihat / Unduh</a></p>
-                                    @endif
                                 </div>
                             @endif
 
-                            <input type="file" name="file" id="file" accept=".pdf,.doc,.docx,.jpg,.png"
-                                class="w-full text-white bg-zinc-800 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#ffcc00]/20 file:text-[#ffcc00] hover:file:bg-blue-100 @error('file') border-red-500 @enderror">
-                            <p class="mt-1 text-xs text-white/80">Format: PDF, DOC, DOCX, JPG, PNG. Maksimal 2MB</p>
-                            @error('file')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                            <input type="file" name="file" id="file" accept=".pdf,.doc,.docx"
+                                class="bg-black w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#ffcc00]/20 file:text-[#ffcc00] hover:file:bg-[#ffcc00]/30 @error('file') border-red-500 @enderror">
+                            <p class="mt-1 text-xs text-white/80">
+                                @if($surat->file)
+                                    Upload file baru untuk mengganti file yang ada. Format: PDF, DOC, DOCX. Maksimal 2MB
+                                @else
+                                    Format: PDF, DOC, DOCX. Maksimal 2MB
+                                @endif
+                            </p>
+                            @error('file')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="flex items-center justify-end space-x-3">
-                            <a href="{{ route('surat-masuk.index') }}" class="bg-red-500 hover:bg-red-500/80 text-white font-bold py-2 px-4 rounded">
+                            <a href="{{ route('surat-masuk.index') }}" class="bg-red-600 hover:bg-red-600/90 text-white font-bold py-2 px-4 rounded">
                                 Batal
                             </a>
                             <button type="submit" class="bg-[#ffcc00] hover:bg-[#ffcc00]/80 text-black font-bold py-2 px-4 rounded">
-                                Simpan Perubahan
+                                Update
                             </button>
-                        </div>
-                        <div class="mt-4 text-xs text-white/60">
-                            <div>Dibuat: {{ $surat->created_at?->format('d-m-Y H:i') ?? '-' }}</div>
-                            <div>Terakhir diperbarui: {{ $surat->updated_at?->format('d-m-Y H:i') ?? '-' }}</div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- flatpickr dark theme + init (visible format dd-mm-yyyy, underlying value Y-m-d) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script>
-        document.querySelectorAll('.js-datepicker').forEach(function(el){
-            flatpickr(el, {
-                dateFormat: 'Y-m-d',
-                altInput: true,
-                altFormat: 'd-m-Y',
-                altInputClass: 'flatpickr-input w-full text-white bg-zinc-800 rounded-md border-zinc-800 shadow-sm focus:border-blue-500 focus:ring-blue-500',
-                allowInput: true,
-            });
-        });
-    </script>
 </x-app-layout>

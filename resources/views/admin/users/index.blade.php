@@ -21,6 +21,60 @@
                 </div>
             @endif
 
+            <!-- Statistik Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <!-- Total Users -->
+                <div class="bg-zinc-900 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-blue-500/20 rounded-md p-3">
+                                <svg class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-400">Total User</p>
+                                <p class="text-2xl font-semibold text-white">-</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Verified Users -->
+                <div class="bg-zinc-900 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-green-500/20 rounded-md p-3">
+                                <svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-400">User Terverifikasi</p>
+                                <p class="text-2xl font-semibold text-white">-</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Users -->
+                <div class="bg-zinc-900 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-yellow-500/20 rounded-md p-3">
+                                <svg class="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-400">User Pending</p>
+                                <p class="text-2xl font-semibold text-white">-</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Tabs Navigation -->
             <div class="border-b border-gray-700 mb-6">
                 <ul class="flex flex-wrap -mb-px text-sm font-medium text-center">
@@ -142,10 +196,10 @@
                 <div class="bg-zinc-900 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         @php
-                            $verifiedUsers = $users->where('is_verified', true);
+                            $verifiedUsersList = $users->where('is_verified', true);
                         @endphp
 
-                        @if($verifiedUsers->count() > 0)
+                        @if($verifiedUsersList->count() > 0)
                             <div class="overflow-x-auto">
                                 <table class="min-w-full divide-y divide-gray-600">
                                     <thead class="bg-zinc-800">
@@ -158,7 +212,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-600">
-                                        @foreach($verifiedUsers as $user)
+                                        @foreach($verifiedUsersList as $user)
                                             <tr class="hover:bg-zinc-800/50">
                                                 <td class="px-6 py-4 text-sm text-white">{{ $user->name }}</td>
                                                 <td class="px-6 py-4 text-sm text-white">{{ $user->email }}</td>
@@ -201,10 +255,10 @@
                 <div class="bg-zinc-900 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         @php
-                            $pendingUsers = $users->where('is_verified', false)->where('role', '!=', 'admin');
+                            $pendingUsersList = $users->where('is_verified', false)->where('role', '!=', 'admin');
                         @endphp
 
-                        @if($pendingUsers->count() > 0)
+                        @if($pendingUsersList->count() > 0)
                             <div class="overflow-x-auto">
                                 <table class="min-w-full divide-y divide-gray-600">
                                     <thead class="bg-zinc-800">
@@ -217,7 +271,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-600">
-                                        @foreach($pendingUsers as $user)
+                                        @foreach($pendingUsersList as $user)
                                             <tr class="hover:bg-zinc-800/50">
                                                 <td class="px-6 py-4 text-sm text-white">{{ $user->name }}</td>
                                                 <td class="px-6 py-4 text-sm text-white">{{ $user->email }}</td>

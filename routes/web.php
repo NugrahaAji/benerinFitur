@@ -21,16 +21,12 @@ Route::middleware(['auth'])->group(function () {
 
 // Route untuk admin
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    // User Management
     Route::get('/users', [UserManagementController::class, 'index'])->name('users.index');
     Route::get('/users/pending', [UserManagementController::class, 'pending'])->name('users.pending');
     Route::post('/users/{id}/verify', [UserManagementController::class, 'verify'])->name('users.verify');
     Route::post('/users/{id}/reject', [UserManagementController::class, 'reject'])->name('users.reject');
     Route::post('/users/{id}/toggle', [UserManagementController::class, 'toggleStatus'])->name('users.toggle');
     Route::delete('/users/{id}', [UserManagementController::class, 'destroy'])->name('users.destroy');
-    Route::get('/users/verification', [UserVerificationController::class, 'index'])->name('users.verification');
-    Route::patch('/users/{user}/verify-toggle', [UserVerificationController::class, 'verify'])->name('users.verify.toggle');
-    Route::patch('/users/{user}/unverify', [UserVerificationController::class, 'unverify'])->name('users.unverify');
 });
 
 // Route yang memerlukan verifikasi
